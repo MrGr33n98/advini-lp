@@ -1,0 +1,48 @@
+/*!*****************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./components/HeroSection.module.css ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************/
+/* Em HeroSection.module.css */
+
+.HeroSection_heroSection__tTVHz {
+    width: 100vw;
+    background-image: /* AJUSTE AQUI: Reduzindo AINDA MAIS a opacidade do gradiente */
+    linear-gradient(to right, rgba(30, 41, 59, 0.35), rgba(30, 64, 175, 0.30)), /* Valores anteriores sugeridos: 0.55 e 0.50. Originalmente: 0.96 e 0.92. */
+    /* Agora estamos experimentando com 0.35 e 0.30. Isso é bem transparente. */
+    url('/images/advogado-vinicius-de-morais.png');
+    background-repeat: no-repeat, no-repeat;
+    background-size: cover, 960px auto;
+    background-position: center, -100px bottom;
+    background-color: #1e293b;
+    /* Cor base */
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+    .HeroSection_heroSection__tTVHz {
+        /* Se o gradiente principal mudou, idealmente o gradiente aqui também deveria acompanhar
+       para manter a consistência, a menos que você queira um efeito diferente para esta resolução.
+       Assumindo que queremos o mesmo nível de transparência:
+    */
+        background-image: linear-gradient(to right, rgba(30, 41, 59, 0.35), rgba(30, 64, 175, 0.30)), url('/images/advogado-vinicius-de-morais.png');
+        background-size: cover, min(75vw, 680px) auto;
+        background-position: center, -50px bottom;
+    }
+}
+
+@media (max-width: 640px) {
+    .HeroSection_heroSection__tTVHz {
+        /* Ajuste a opacidade aqui também, se aplicável à sua escolha para mobile */
+        background-image: linear-gradient(to right, rgba(30, 41, 59, 0.35), rgba(30, 64, 175, 0.30));
+        background-size: cover;
+        background-position: center;
+        /* Exemplo para Opção 2 (com imagem em mobile):
+    background-image: 
+      linear-gradient(to right, rgba(30, 41, 59, 0.35), rgba(30, 64, 175, 0.30)), 
+      url('/images/advogado-vinicius-de-morais.png');
+    background-size: cover, contain; // ou outro tamanho apropriado
+    background-repeat: no-repeat, no-repeat;
+    background-position: center, center bottom;
+    */
+    }
+}

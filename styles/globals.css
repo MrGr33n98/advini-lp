@@ -1,0 +1,239 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+    --primary: #2563eb;
+    --secondary: #10b981;
+    --accent: #f59e0b;
+    --dark: #1f2937;
+    --light: #f9fafb;
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
+}
+
+
+/* Opcional: modo escuro via media query */
+
+
+/*
+@media (prefers-color-scheme: dark) {
+  :root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
+  }
+}
+*/
+
+body {
+    color: rgb(var(--foreground-rgb));
+    background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+    font-family: 'Inter', sans-serif;
+    scroll-behavior: smooth;
+    background-color: var(--light);
+}
+
+.hero-gradient {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+}
+
+.floating-button {
+    position: fixed;
+    inset-block-end: 2rem;
+    inset-inline-end: 2rem;
+    z-index: 100;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    animation: pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.cta-button {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-button:after {
+    content: '';
+    position: absolute;
+    inset-block-start: -50%;
+    inset-inline-start: -50%;
+    inline-size: 200%;
+    block-size: 200%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(30deg);
+    transition: all 0.6s ease;
+}
+
+.cta-button:hover:after {
+    transform: rotate(30deg) translate(20%, 20%);
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.2);
+}
+
+.stat-card {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.problem-card {
+    transition: all 0.3s ease;
+    border-inline-start: 4px solid transparent;
+}
+
+.problem-card:hover {
+    transform: translateY(-5px);
+    border-inline-start-color: var(--accent);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+}
+
+.service-card {
+    transition: all 0.3s ease;
+    border-block-end: 3px solid transparent;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    border-block-end-color: var(--secondary);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+}
+
+.testimonial-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.testimonial-card:before {
+    content: '"';
+    position: absolute;
+    inset-block-start: -20px;
+    inset-inline-start: 10px;
+    font-size: 120px;
+    color: rgba(37, 99, 235, 0.05);
+    font-family: Georgia, serif;
+    line-height: 1;
+}
+
+.guarantee-badge {
+    position: absolute;
+    inset-block-start: -15px;
+    inset-inline-end: 20px;
+    background: var(--secondary);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: rotate(5deg);
+    animation: wiggle 3s ease-in-out infinite;
+}
+
+@keyframes wiggle {
+    0%,
+    100% {
+        transform: rotate(5deg);
+    }
+    50% {
+        transform: rotate(-5deg);
+    }
+}
+
+.popup {
+    position: fixed;
+    inset-block-end: 20px;
+    inset-inline-start: 20px;
+    z-index: 100;
+    max-inline-size: 350px;
+    animation: slideIn 0.5s ease-out forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.popup-close {
+    position: absolute;
+    inset-block-start: 10px;
+    inset-inline-end: 10px;
+    cursor: pointer;
+}
+
+.lead-form {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.lead-form input,
+.lead-form select,
+.lead-form textarea {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+.lead-form input::placeholder,
+.lead-form select::placeholder,
+.lead-form textarea::placeholder {
+    color: #777;
+}
+
+.lead-form input:focus,
+.lead-form select:focus,
+.lead-form textarea:focus {
+    background: white;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
+}
+
+
+/* Em seu arquivo CSS global, por exemplo: styles/globals.css */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+        /* Começa um pouco mais para baixo */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fadeInUp {
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+}
