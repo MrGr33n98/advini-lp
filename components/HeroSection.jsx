@@ -1,8 +1,10 @@
 ﻿'use client';
+import { useState } from 'react';
 import { FaWhatsapp, FaCalendarAlt, FaCheckCircle, FaStar, FaDollarSign } from 'react-icons/fa';
 import styles from './HeroSection.module.css';
+import { supabase } from '../lib/supabaseClient';
 
-// COMPONENTES AUXILIARES (movidos para o final para melhor leitura do componente principal)
+// COMPONENTES AUXILIARES
 function Indicador({ icon, valor, legenda }) {
   return (
     <div className="flex items-center space-x-2">
@@ -15,23 +17,27 @@ function Indicador({ icon, valor, legenda }) {
   );
 }
 
-function Input({ name, type, placeholder }) {
+function Input({ name, type, placeholder, value, onChange }) {
   return (
     <input
       name={name}
       type={type}
       placeholder={placeholder}
       required
+      value={value}
+      onChange={onChange}
       className="w-full px-4 py-3 rounded-lg text-sm bg-white/90 text-slate-700 placeholder-slate-400 focus:bg-white focus:ring-2 focus:ring-yellow-400 outline-none"
     />
   );
 }
 
-function Select({ name, options }) {
+function Select({ name, options, value, onChange }) {
   return (
     <select
       name={name}
       required
+      value={value}
+      onChange={onChange}
       className="w-full px-4 py-3 rounded-lg text-sm text-slate-500 bg-white/90 focus:bg-white focus:ring-2 focus:ring-yellow-400 outline-none"
     >
       <option value="">Tipo de dívida principal</option>
@@ -45,13 +51,42 @@ function Select({ name, options }) {
 }
 
 export default function HeroSection() {
-  // Altura da Navbar (ex: h-20 que é 5rem. No Tailwind, -mt-20 = margin-top: -5rem)
-  // Padding original da section era: py-16 md:py-24 lg:py-32
-  // Novo padding superior para compensar o -mt-20 (5rem):
-  // pt-16 (4rem) + 5rem = 9rem -> pt-36
-  // md:pt-24 (6rem) + 5rem = 11rem -> md:pt-44
-  // lg:pt-32 (8rem) + 5rem = 13rem -> lg:pt-52
-  // Padding inferior permanece o mesmo.
+  // Estado do formulário
+  const [form, setForm] = useState({
+    nome: '',
+    whatsapp: '',
+    email: '',
+    tipo_divida: '',
+    descricao: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  // Manipulador de mudança
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  // Manipulador de envio
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSuccess(false);
+    const { error } = await supabase.from('leads').insert([form]);
+    setLoading(false);
+    if (!error) {
+      setSuccess(true);
+      setForm({
+        nome: '',
+        whatsapp: '',
+        email: '',
+        tipo_divida: '',
+        descricao: ''
+      });
+    } else {
+      alert('Erro ao enviar. Tente novamente.');
+    }
+  };
 
   return (
     <section 
@@ -59,10 +94,6 @@ export default function HeroSection() {
                  pb-16 md:pb-24 lg:pb-32 
                  pt-36 md:pt-44 lg:pt-52`}
     >
-      {/* A linha <div className="absolute inset-0 bg-black/10 z-0" aria-hidden="true" /> foi removida 
-          conforme nossa discussão anterior para melhorar a aparência do background. 
-          Se quiser de volta, pode adicionar aqui. */}
-
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
@@ -78,7 +109,7 @@ export default function HeroSection() {
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 mb-10 justify-center md:justify-start">
               <a
-                href="https://calendly.com/seu-usuario-calendly" // LEMBRE-SE DE ATUALIZAR ESTE LINK
+                href="https://calendly.com/seu-usuario-calendly"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-secondary hover:bg-emerald-600 text-white font-bold py-3.5 px-8 rounded-lg shadow-lg transition duration-300 flex items-center justify-center text-lg"
@@ -127,10 +158,10 @@ export default function HeroSection() {
                 Preencha e descubra como podemos reduzir sua dívida.
               </p>
 
-              <form className="space-y-4">
-                <Input name="nome" type="text" placeholder="Seu nome completo" />
-                <Input name="whatsapp" type="tel" placeholder="Seu WhatsApp (DDD + Número)" />
-                <Input name="email" type="email" placeholder="Seu melhor e-mail" />
+              <form className="space-y-4" onSubmit={handleSubmit}>
+                <Input name="nome" type="text" placeholder="Seu nome completo" value={form.nome} onChange={handleChange} />
+                <Input name="whatsapp" type="tel" placeholder="Seu WhatsApp (DDD + Número)" value={form.whatsapp} onChange={handleChange} />
+                <Input name="email" type="email" placeholder="Seu melhor e-mail" value={form.email} onChange={handleChange} />
                 <Select
                   name="tipo_divida"
                   options={[
@@ -141,19 +172,29 @@ export default function HeroSection() {
                     'Crédito Imobiliário',
                     'Outro',
                   ]}
+                  value={form.tipo_divida}
+                  onChange={handleChange}
                 />
                 <textarea
                   name="descricao"
                   placeholder="Descreva brevemente sua situação (opcional)"
                   rows={3}
+                  value={form.descricao}
+                  onChange={handleChange}
                   className="w-full px-4 py-3 rounded-lg text-sm bg-white/90 text-slate-700 placeholder-slate-400 focus:bg-white focus:ring-2 focus:ring-yellow-400 outline-none"
                 />
                 <button
                   type="submit"
                   className="w-full bg-yellow-500 hover:bg-yellow-600 text-dark font-bold py-3.5 px-8 rounded-lg shadow-lg transition duration-300 text-base"
+                  disabled={loading}
                 >
-                  Enviar para Análise Gratuita
+                  {loading ? 'Enviando...' : 'Enviar para Análise Gratuita'}
                 </button>
+                {success && (
+                  <p className="text-green-400 text-center pt-2">
+                    Enviado com sucesso!
+                  </p>
+                )}
                 <p className="text-xs text-blue-200 text-center pt-2">
                   Seus dados estão seguros conosco.
                 </p>

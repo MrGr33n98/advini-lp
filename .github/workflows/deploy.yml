@@ -1,0 +1,26 @@
+name: Deploy to DigitalOcean
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_KEY }}
+          script: |
+            cd /root/opt/advini-advocacia-next
+            git pull
+            docker build -t advini-advocacia:latest .
+            docker stop advini-advocacia || true
+            docker rm advini-advocacia || true
+            docker run -d --name advini-advocacia -p 3000:3000 advini-advocacia:latest
