@@ -1,6 +1,4 @@
-// supabase.js
-// Cliente Supabase configurado com suas credenciais
-
+// app/lib/supabaseClient.js
 import { createClient } from '@supabase/supabase-js';
 
 // URL e anon key do seu projeto Supabase
@@ -14,10 +12,10 @@ if (!supabaseUrl || !supabaseAnonKey) {
     );
 }
 
-// Cria o cliente Supabase que adiciona automaticamente os cabeçalhos necessários
+// Cria o cliente Supabase — ele inclui “apikey” em todas as requisições
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// (Opcional) Helpers de autenticação podem ser adicionados abaixo, se necessário:
+// (Opcional) Helpers de autenticação podem ser adicionados abaixo
 // export async function signInWithEmail(email, password) {
 //   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 //   if (error) throw error;
