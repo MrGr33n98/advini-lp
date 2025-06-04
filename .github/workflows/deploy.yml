@@ -20,11 +20,8 @@ jobs:
           script: |
             cd /root/opt/advini-advocacia-next
             git pull
-
-            # Cria o .env.local com os secrets do GitHub
             echo "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.SUPABASE_URL }}" > .env.local
             echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> .env.local
-
             docker build -t advini-advocacia:latest .
             docker stop advini-advocacia || true
             docker rm advini-advocacia || true
