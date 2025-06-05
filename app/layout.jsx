@@ -1,4 +1,4 @@
-﻿import './../styles/globals.css'; // Importe o CSS global
+﻿import '../styles/globals.css';
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
