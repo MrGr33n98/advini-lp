@@ -1,4 +1,5 @@
 ﻿import { FaWhatsapp, FaUserTie, FaBalanceScale, FaFileSignature, FaRegSmileBeam } from 'react-icons/fa';
+import { supabase } from '../utils/supabaseClient'; // Certifique-se de que o caminho está correto
 
 export default function ProcessSection() {
   const steps = [
@@ -27,6 +28,12 @@ export default function ProcessSection() {
       description: "Atuamos para reduzir sua dívida, limpar seu nome e restaurar sua tranquilidade.",
     },
   ];
+
+  const fetchData = async () => {
+    const { data, error } = await supabase.from('leads').select('*');
+    if (error) console.log('Erro ao buscar dados:', error);
+    else console.log('Dados recebidos:', data);
+  };
 
   return (
     <section id="process" className="py-16 lg:py-24 bg-gray-100">
