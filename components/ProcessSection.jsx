@@ -35,6 +35,15 @@ export default function ProcessSection() {
     else console.log('Dados recebidos:', data);
   };
 
+  const handleSubmit = async (form) => {
+    const { error } = await supabase.from('leads').insert([form]);
+    if (error) {
+      console.log('Erro ao enviar dados:', error);
+    } else {
+      console.log('Dados enviados com sucesso:', form);
+    }
+  };
+
   return (
     <section id="process" className="py-16 lg:py-24 bg-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
