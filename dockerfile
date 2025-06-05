@@ -1,22 +1,35 @@
-# Etapa de build
+# ====== Etapa 1: Build ======
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Copia apenas os arquivos de dependências para instalar mais rápido em builds futuros
-COPY package.json package-lock.json* ./
+# Instala dependências
+COPY package.json package-lock.json ./
 RUN npm install
 
-# Copia o restante do projeto e o .env.local antes do build
+# Declara os build-args
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+# Define-os como variáveis de ambiente no build
+ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+# Copia todo o código para dentro do container de build
 COPY . .
-COPY .env.local .env.local
+
+# Roda o build do Next.js (usar essas ENV para gerar o bundle correto)
 RUN npm run build
 
-# Etapa de produção
+# ====== Etapa 2: Runtime ======
 FROM node:20-alpine
 WORKDIR /app
 
-# Copia tudo da etapa de build
+# Copia os arquivos do builder para o container final
 COPY --from=builder /app ./
+
+# (Opcional) Reexporta as variáveis caso algum código precise em runtime
+ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
 
 EXPOSE 3000
 CMD ["npm", "start"]
